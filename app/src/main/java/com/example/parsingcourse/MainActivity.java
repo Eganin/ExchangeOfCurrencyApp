@@ -17,6 +17,7 @@ import java.util.Collections;
 public class MainActivity extends AppCompatActivity implements View.OnClickListener,
         AdapterView.OnItemSelectedListener {
 
+    // массив с основними инициалами валют
     private static final String[] currencySymbols = new String[]{"rub", "usd", "eur", "chf",
             "gbp", "jpy", "uah", "kzt", "byn", "try", "cny", "aud", "cad", "pln"};
     private ArrayList<String> spinnerListCurrencySymbols = new ArrayList<>(14);
@@ -40,8 +41,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+        // обработчик  spinner
         int currentId = view.getId();
-
         clickItemFromSpinner(currentId);
     }
 
@@ -53,12 +54,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void onClick(View view) {
-
+        // обрабатываем кнопку которая запускает остальные процессы
         getDataFromEditTextCurrency();
 
     }
 
     private void fillingFields() {
+        // заполнение полей
         editTextCurrencyFirst = findViewById(R.id.editTextCurrency);
         editTextCurrencySecond = findViewById(R.id.editTextCurrency1);
         spinnerCurrencyFirst = findViewById(R.id.spinnerCurrency);
@@ -75,18 +77,25 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         String currencyTextUserFirst = editTextCurrencyFirst.getText().toString();
         String currencyTextUserSecond = editTextCurrencySecond.getText().toString();
 
+        // добавляем данные в пары
         addPairsData(currencySpinnerTextFirst,currencySpinnerTextSecond
                 ,currencyTextUserFirst,currencyTextUserSecond);
     }
 
     private void addPairsData(String currencySpinnerText , String currencySpinnerText1
             , String currencyTextUser , String currencyTextUserSecond){
+        /*
+        в этом методе для структуризации
+        добавляем полученные значения в Pair
+        который модет содержать по два элемента
+         */
         Pair<String , String> pairsSpinnerText =
                 new Pair<String , String>(currencySpinnerText, currencySpinnerText1);
 
         Pair<String , String> pairsTextUser =
                 new Pair<String , String>(currencyTextUser, currencyTextUserSecond);
 
+        // создаем и запускаем асинхронную задачу
         CourseParse courseParse = new CourseParse(pairsSpinnerText,pairsTextUser);
 
         courseParse.execute();
@@ -98,6 +107,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void initSpinners() {
+        // инициализация и заполнение обоих спиннеров
         initSpinner();
         initSpinner1();
     }
@@ -121,6 +131,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void clickItemFromSpinner(int currentId) {
+        // оюработчик обоих spinner
         switch (currentId){
             case R.id.spinnerCurrency:
                 break;
