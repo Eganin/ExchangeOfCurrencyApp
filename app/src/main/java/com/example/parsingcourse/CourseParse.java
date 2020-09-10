@@ -16,14 +16,14 @@ public class CourseParse extends AsyncTask<Void , Void , String> {
     private static  String BASE_URL="https://ru.investing.com/currencies/%s-%s";
 
     private Pair<String,String> pairSpinnerTexts;
-    private Pair<String,String> pairSymbols;
-    private String spinnerText ;
-    private String spinnerText1 ;
+    private Pair<String,String> pairsTextUser;
+    private String textUserFirst ;
+    private String textUserSecond ;
 
-    public CourseParse(Pair<String,String> pairSpinnerTexts ,Pair<String,String> pairSymbols){
+    public CourseParse(Pair<String,String> pairSpinnerTexts ,Pair<String,String> pairsTextUser){
         this.pairSpinnerTexts=pairSpinnerTexts;
-        this.pairSymbols=pairSymbols;
-        //BASE_URL = String.format(BASE_URL,currency,currency1);
+        this.pairsTextUser=pairsTextUser;
+        unpackingPairs();
     }
 
     @Override
@@ -39,11 +39,12 @@ public class CourseParse extends AsyncTask<Void , Void , String> {
     }
 
     private void unpackingPairs(){
-        spinnerText = pairSpinnerTexts.first;
-        spinnerText1 = pairSpinnerTexts.second;
+        textUserFirst = pairSpinnerTexts.first;
+        textUserSecond = pairSpinnerTexts.second;
 
-        String symbol = pairSymbols.first;
-        String sumbol1 = pairSymbols.second;
+        String spinnerTextFirst = pairSpinnerTexts.first;
+        String spinnerTextSecond = pairSpinnerTexts.second;
+        BASE_URL = String.format(BASE_URL,spinnerTextFirst,spinnerTextSecond);
     }
 
     private String getContent(String path){
@@ -78,19 +79,4 @@ public class CourseParse extends AsyncTask<Void , Void , String> {
         return httpsURLConnection;
     }
 
-    public Pair<String, String> getPairSpinnerTexts() {
-        return pairSpinnerTexts;
-    }
-
-    public void setPairSpinnerTexts(Pair<String, String> pairSpinnerTexts) {
-        this.pairSpinnerTexts = pairSpinnerTexts;
-    }
-
-    public Pair<String, String> getPairSymbols() {
-        return pairSymbols;
-    }
-
-    public void setPairSymbols(Pair<String, String> pairSymbols) {
-        this.pairSymbols = pairSymbols;
-    }
 }

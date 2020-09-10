@@ -72,22 +72,22 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         String currencySpinnerTextFirst = spinnerCurrencyFirst.getSelectedItem().toString();
         String currencySpinnerTextSecond = spinnerCurrencySecond.getSelectedItem().toString();
-        String currencySymbolFirst = editTextCurrencyFirst.getText().toString();
-        String currencySymbolSecond = editTextCurrencySecond.getText().toString();
+        String currencyTextUserFirst = editTextCurrencyFirst.getText().toString();
+        String currencyTextUserSecond = editTextCurrencySecond.getText().toString();
 
         addPairsData(currencySpinnerTextFirst,currencySpinnerTextSecond
-                ,currencySymbolFirst,currencySymbolSecond);
+                ,currencyTextUserFirst,currencyTextUserSecond);
     }
 
     private void addPairsData(String currencySpinnerText , String currencySpinnerText1
-            , String currencySymbol , String currencySymbol1){
-        Pair<String , String> pairSpinnerTexts =
+            , String currencyTextUser , String currencyTextUserSecond){
+        Pair<String , String> pairsSpinnerText =
                 new Pair<String , String>(currencySpinnerText, currencySpinnerText1);
 
-        Pair<String , String> pairSymbols =
-                new Pair<String , String>(currencySymbol, currencySymbol1);
+        Pair<String , String> pairsTextUser =
+                new Pair<String , String>(currencyTextUser, currencyTextUserSecond);
 
-        CourseParse courseParse = new CourseParse(pairSpinnerTexts,pairSymbols);
+        CourseParse courseParse = new CourseParse(pairsSpinnerText,pairsTextUser);
 
         courseParse.execute();
     }
