@@ -1,6 +1,7 @@
 package com.example.parsingcourse;
 
 import android.os.AsyncTask;
+import android.util.Pair;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -14,13 +15,15 @@ public class CourseParse extends AsyncTask<Void , Void , String> {
 
     private static  String BASE_URL="https://ru.investing.com/currencies/%s-%s";
 
-    private String currency;
-    private String currency1;
+    private Pair<String,String> pairSpinnerTexts;
+    private Pair<String,String> pairSymbols;
+    private String spinnerText ;
+    private String spinnerText1 ;
 
-    public CourseParse(String currency , String currency1){
-        this.currency=currency;
-        this.currency1=currency1;
-        BASE_URL = String.format(BASE_URL,currency,currency1);
+    public CourseParse(Pair<String,String> pairSpinnerTexts ,Pair<String,String> pairSymbols){
+        this.pairSpinnerTexts=pairSpinnerTexts;
+        this.pairSymbols=pairSymbols;
+        //BASE_URL = String.format(BASE_URL,currency,currency1);
     }
 
     @Override
@@ -33,6 +36,14 @@ public class CourseParse extends AsyncTask<Void , Void , String> {
     @Override
     protected void onPostExecute(String content){
         System.out.println(content);
+    }
+
+    private void unpackingPairs(){
+        spinnerText = pairSpinnerTexts.first;
+        spinnerText1 = pairSpinnerTexts.second;
+
+        String symbol = pairSymbols.first;
+        String sumbol1 = pairSymbols.second;
     }
 
     private String getContent(String path){
@@ -67,19 +78,19 @@ public class CourseParse extends AsyncTask<Void , Void , String> {
         return httpsURLConnection;
     }
 
-    public String getCurrency1() {
-        return currency1;
+    public Pair<String, String> getPairSpinnerTexts() {
+        return pairSpinnerTexts;
     }
 
-    public void setCurrency1(String currency1) {
-        this.currency1 = currency1;
+    public void setPairSpinnerTexts(Pair<String, String> pairSpinnerTexts) {
+        this.pairSpinnerTexts = pairSpinnerTexts;
     }
 
-    public String getCurrency() {
-        return currency;
+    public Pair<String, String> getPairSymbols() {
+        return pairSymbols;
     }
 
-    public void setCurrency(String currency) {
-        this.currency = currency;
+    public void setPairSymbols(Pair<String, String> pairSymbols) {
+        this.pairSymbols = pairSymbols;
     }
 }
