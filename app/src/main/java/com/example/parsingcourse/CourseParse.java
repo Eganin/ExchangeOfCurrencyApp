@@ -12,15 +12,15 @@ import javax.net.ssl.HttpsURLConnection;
 
 public class CourseParse extends AsyncTask<Void , Void , String> {
 
-    private static final String BASE_URL="https://www.google.com/search?sxsrf=ALeKk03xlghZiU" +
-            "--RuJLxEKJV1I-Oa0s9Q%3A1599750491316&source=hp&ei=W0FaX4fmD6qEwPAPzJWtyAE&q=доллар+" +
-            "к+рублю&oq=доллар+&gs_lcp=CgZwc3ktYWIQARgAMgkIIxAnEEYQggIyBQgAELEDMggIABCxAx" +
-            "CDATIFCAAQsQMyCAgAELEDEIMBMggIABCxAxCDATIFCAAQsQMyBQgAELEDMggIABCxAxCDATIFCAAQsQM6" +
-            "BwguECcQkwI6BAgjECc6AggAOggILhCxAxCDAToFCC4QsQNQkgtY2hlgzyhoAHAAeACAAXKIAccFkgEDMy40" +
-            "mAEAoAEBqgEHZ3dzLXdpeg&sclient=psy-ab";
+    private static  String BASE_URL="https://ru.investing.com/currencies/%s-%s";
 
-    public CourseParse(){
+    private String currency;
+    private String currency1;
 
+    public CourseParse(String currency , String currency1){
+        this.currency=currency;
+        this.currency1=currency1;
+        BASE_URL = String.format(BASE_URL,currency,currency1);
     }
 
     @Override
@@ -65,5 +65,21 @@ public class CourseParse extends AsyncTask<Void , Void , String> {
         httpsURLConnection.connect();
 
         return httpsURLConnection;
+    }
+
+    public String getCurrency1() {
+        return currency1;
+    }
+
+    public void setCurrency1(String currency1) {
+        this.currency1 = currency1;
+    }
+
+    public String getCurrency() {
+        return currency;
+    }
+
+    public void setCurrency(String currency) {
+        this.currency = currency;
     }
 }

@@ -10,16 +10,54 @@
     <LinearLayout
         android:id="@+id/linearLayoutCurrency"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:layout_height="50dp"
+        android:orientation="horizontal"
+        android:weightSum="3"
+        android:layout_marginTop="260dp">
+
+        <Spinner
+            android:id="@+id/spinnerCurrency"
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"/>
+
+        <EditText
+            android:id="@+id/editTextCurrency"
+            android:layout_weight="2"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:hint="0"/>
 
     </LinearLayout>
 
     <LinearLayout
         android:id="@+id/linearLayoutCurrency1"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:layout_height="50dp"
+        android:orientation="horizontal"
+        android:weightSum="3"
+        android:layout_below="@id/linearLayoutCurrency">
+
+        <Spinner
+            android:id="@+id/spinnerCurrency1"
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"/>
+        <EditText
+            android:id="@+id/editTextCurrency1"
+            android:layout_weight="2"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:hint="0"/>
 
     </LinearLayout>
+
+    <Button
+        android:id="@+id/buttonTranslate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/button_text"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="200dp"/>
 </RelativeLayout>
