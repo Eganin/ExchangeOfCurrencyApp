@@ -2,6 +2,8 @@ package com.example.parsingcourse;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Pair;
 import android.view.View;
@@ -10,12 +12,19 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.Collections;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener,
         AdapterView.OnItemSelectedListener {
+
+    /*
+    создаем переменные для ссылки методов MainActivity из
+    других классов
+     */
+    private static MainActivity _app;
 
     // массив с основними инициалами валют
     private static final String[] currencySymbols = new String[]{"rub", "usd", "eur", "chf",
@@ -37,6 +46,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         fillingFields();
         fillingArrayList();
         initSpinners();
+    }
+
+    public static MainActivity getApp()
+    {
+        return _app;
     }
 
     @Override
@@ -76,6 +90,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         String currencySpinnerTextSecond = spinnerCurrencySecond.getSelectedItem().toString();
         String currencyTextUserFirst = editTextCurrencyFirst.getText().toString();
         String currencyTextUserSecond = editTextCurrencySecond.getText().toString();
+
+        System.out.println(currencySpinnerTextFirst);
+        System.out.println(currencySpinnerTextSecond);
 
         // добавляем данные в пары
         addPairsData(currencySpinnerTextFirst,currencySpinnerTextSecond
@@ -139,6 +156,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.spinnerCurrency1:
                 break;
         }
+    }
+
+    private void getDataFromCourseParse(){
+        Intent currentIntent = getIntent();
+    }
+
+    public void setCurrencyResult(String currencyResult){
+        // примнение результата парсера
+        System.out.println(currencyResult);
+        fillingFields();
+        editTextCurrencySecond.setText(currencyResult, TextView.BufferType.EDITABLE);
     }
 
 }
