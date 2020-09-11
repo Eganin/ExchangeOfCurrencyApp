@@ -1,5 +1,7 @@
 package com.example.parsingcourse;
 
+import android.content.Context;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.util.Pair;
 import org.jsoup.Jsoup;
@@ -16,11 +18,16 @@ public class CourseParse extends AsyncTask<Void, Void, Document> {
     private Pair<String, String> pairsTextUser;
     private String textUserFirst;
     private String textUserSecond;
+    private String spinnerTextFirst;
+    private String spinnerTextSecond;
     private Double coefficient;
+    private Context context;
 
-    public CourseParse(Pair<String, String> pairSpinnerTexts, Pair<String, String> pairsTextUser) {
+    public CourseParse(Pair<String, String> pairSpinnerTexts, Pair<String, String> pairsTextUser,
+                       Context context) {
         this.pairSpinnerTexts = pairSpinnerTexts;
         this.pairsTextUser = pairsTextUser;
+        this.context=context;
 
         unpackingPairs();
     }
@@ -43,11 +50,11 @@ public class CourseParse extends AsyncTask<Void, Void, Document> {
         в данном методе получаем коэфициент валют посредсвом парсинга
          */
         if(content == null){
-            startFalseSetText();
+            startFalseActivity();
         }else{
             findCoefficientCurrency(content);
             transformationsDataCurrency();
-            startTrueSetText();
+            startTrueActivity();
         }
     }
 
@@ -70,8 +77,8 @@ public class CourseParse extends AsyncTask<Void, Void, Document> {
         textUserFirst = pairsTextUser.first;
         textUserSecond = pairsTextUser.second;
 
-        String spinnerTextFirst = pairSpinnerTexts.first;
-        String spinnerTextSecond = pairSpinnerTexts.second;
+        spinnerTextFirst = pairSpinnerTexts.first;
+        spinnerTextSecond = pairSpinnerTexts.second;
         // формируем url
         BASE_URL = String.format(BASE_URL, spinnerTextFirst, spinnerTextSecond);
     }
@@ -85,16 +92,26 @@ public class CourseParse extends AsyncTask<Void, Void, Document> {
         return page;
     }
 
-    private void startTrueSetText(){
+    private void startTrueActivity(){
         // передача результатов если парсинг произошел успешно
-        MainActivity mainActivity = new MainActivity();
-        mainActivity.setCurrencyResult(textUserSecond);
+        Intent intent = new Intent(context,MainActivity.class);
+        intent.putExtra("resultCurrency",textUserSecond);
+        intent.putExtra("userTextFirst",textUserFirst);
+        intent.putExtra("spinnerResultFirst",spinnerTextFirst);
+        intent.putExtra("spinnerResultSecond",spinnerTextSecond);
+
+        context.startActivity(intent);
     }
 
-    private void startFalseSetText(){
+    private void startFalseActivity(){
         // передача результатов если во парсинг произошла  какая-то ошибка
-        MainActivity mainActivity = new MainActivity();
-        mainActivity.setCurrencyResult(MESSAGE_FAIL);
+        Intent intent = new Intent(context,MainActivity.class);
+        intent.putExtra("resultCurrency",MESSAGE_FAIL);
+        intent.putExtra("userTextFirst",textUserFirst);
+        intent.putExtra("spinnerResultFirst",spinnerTextFirst);
+        intent.putExtra("spinnerResultSecond",spinnerTextSecond);
+
+        context.startActivity(intent);
     }
 
 }

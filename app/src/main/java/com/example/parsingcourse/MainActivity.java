@@ -2,7 +2,6 @@ package com.example.parsingcourse;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Pair;
@@ -12,19 +11,12 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
-import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.Collections;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener,
         AdapterView.OnItemSelectedListener {
-
-    /*
-    создаем переменные для ссылки методов MainActivity из
-    других классов
-     */
-    private static MainActivity _app;
 
     // массив с основними инициалами валют
     private static final String[] currencySymbols = new String[]{"rub", "usd", "eur", "chf",
@@ -44,13 +36,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         fillingFields();
+        getDataFromCourseParse();
         fillingArrayList();
-        initSpinners();
-    }
-
-    public static MainActivity getApp()
-    {
-        return _app;
+        initSpinners(spinnerCurrencyFirst, spinnerAdapterFirst);
+        initSpinners(spinnerCurrencySecond, spinnerAdapterSecond);
     }
 
     @Override
@@ -95,25 +84,26 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         System.out.println(currencySpinnerTextSecond);
 
         // добавляем данные в пары
-        addPairsData(currencySpinnerTextFirst,currencySpinnerTextSecond
-                ,currencyTextUserFirst,currencyTextUserSecond);
+        addPairsData(currencySpinnerTextFirst, currencySpinnerTextSecond
+                , currencyTextUserFirst, currencyTextUserSecond);
     }
 
-    private void addPairsData(String currencySpinnerText , String currencySpinnerText1
-            , String currencyTextUser , String currencyTextUserSecond){
+    private void addPairsData(String currencySpinnerText, String currencySpinnerText1
+            , String currencyTextUser, String currencyTextUserSecond) {
         /*
         в этом методе для структуризации
         добавляем полученные значения в Pair
         который модет содержать по два элемента
          */
-        Pair<String , String> pairsSpinnerText =
-                new Pair<String , String>(currencySpinnerText, currencySpinnerText1);
+        Pair<String, String> pairsSpinnerText =
+                new Pair<String, String>(currencySpinnerText, currencySpinnerText1);
 
-        Pair<String , String> pairsTextUser =
-                new Pair<String , String>(currencyTextUser, currencyTextUserSecond);
+        Pair<String, String> pairsTextUser =
+                new Pair<String, String>(currencyTextUser, currencyTextUserSecond);
 
         // создаем и запускаем асинхронную задачу
-        CourseParse courseParse = new CourseParse(pairsSpinnerText,pairsTextUser);
+        CourseParse courseParse = new CourseParse(pairsSpinnerText, pairsTextUser,
+                getApplicationContext());
 
         courseParse.execute();
     }
@@ -123,33 +113,19 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         Collections.addAll(spinnerListCurrencySymbols, currencySymbols);
     }
 
-    private void initSpinners() {
+    private void initSpinners(Spinner spinner, ArrayAdapter<String> adapter) {
         // инициализация и заполнение обоих спиннеров
-        initSpinner();
-        initSpinner1();
-    }
-
-    private void initSpinner() {
-        spinnerCurrencyFirst.setOnItemSelectedListener(this);
-        spinnerAdapterFirst = new ArrayAdapter<String>(this,
+        spinner.setOnItemSelectedListener(this);
+        adapter = new ArrayAdapter<String>(this,
                 android.R.layout.simple_spinner_item, spinnerListCurrencySymbols);
 
-        spinnerAdapterFirst.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinnerCurrencyFirst.setAdapter(spinnerAdapterFirst);
-    }
-
-    private void initSpinner1() {
-        spinnerCurrencySecond.setOnItemSelectedListener(this);
-        spinnerAdapterSecond = new ArrayAdapter<String>(this,
-                android.R.layout.simple_spinner_item, spinnerListCurrencySymbols);
-
-        spinnerAdapterSecond.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinnerCurrencySecond.setAdapter(spinnerAdapterSecond);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner.setAdapter(adapter);
     }
 
     private void clickItemFromSpinner(int currentId) {
         // оюработчик обоих spinner
-        switch (currentId){
+        switch (currentId) {
             case R.id.spinnerCurrency:
                 break;
 
@@ -158,15 +134,31 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
-    private void getDataFromCourseParse(){
+    private void getDataFromCourseParse() {
         Intent currentIntent = getIntent();
+
+        String resultCurrency = currentIntent.getStringExtra("resultCurrency");
+        if (resultCurrency == null) {
+            return;
+        }
+        String userTextFirst = currentIntent.getStringExtra("userTextFirst");
+        String spinnerResultFirst = currentIntent.getStringExtra("spinnerResultFirst");
+        String spinnerResultSecond = currentIntent.getStringExtra("spinnerResultSecond");
+
+        fillingEditTextsCourseParse(resultCurrency, userTextFirst);
+        fillingSpinnersCourseParse(spinnerResultFirst, spinnerCurrencyFirst);
+        fillingSpinnersCourseParse(spinnerResultSecond, spinnerCurrencySecond);
     }
 
-    public void setCurrencyResult(String currencyResult){
-        // примнение результата парсера
-        System.out.println(currencyResult);
-        fillingFields();
-        editTextCurrencySecond.setText(currencyResult, TextView.BufferType.EDITABLE);
+    private void fillingEditTextsCourseParse(String resultCurrency, String userTextFirst) {
+        editTextCurrencySecond.setText(resultCurrency);
+        editTextCurrencyFirst.setText(userTextFirst);
+    }
+
+    private void fillingSpinnersCourseParse(String spinnerResultText, Spinner spinner) {
+        //  замена элементов в spinner
+        int positionTestSpinner = spinnerListCurrencySymbols.indexOf(spinnerResultText);
+        spinner.setSelection(positionTestSpinner);
     }
 
 }
