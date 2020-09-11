@@ -13,13 +13,13 @@ import android.widget.EditText;
 import android.widget.Spinner;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener,
-        AdapterView.OnItemSelectedListener {
+public class MainActivity extends AppCompatActivity implements View.OnClickListener{
 
     // массив с основними инициалами валют
-    private static final String[] currencySymbols = new String[]{"rub", "usd", "eur", "chf",
+    private static String[] currencySymbols = new String[]{"rub", "usd", "eur", "chf",
             "gbp", "jpy", "uah", "kzt", "byn", "try", "cny", "aud", "cad", "pln"};
     private ArrayList<String> spinnerListCurrencySymbols = new ArrayList<>(14);
 
@@ -35,25 +35,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        fillingFields();
         getDataFromCourseParse();
-        fillingArrayList();
-        initSpinners(spinnerCurrencyFirst, spinnerAdapterFirst);
-        initSpinners(spinnerCurrencySecond, spinnerAdapterSecond);
     }
 
-    @Override
-    public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-        // обработчик  spinner
-        int currentId = view.getId();
-        clickItemFromSpinner(currentId);
-    }
-
-
-    @Override
-    public void onNothingSelected(AdapterView<?> adapterView) {
-
-    }
 
     @Override
     public void onClick(View view) {
@@ -70,6 +54,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         spinnerCurrencySecond = findViewById(R.id.spinnerCurrency1);
         buttonTranslate = findViewById(R.id.buttonTranslate);
         buttonTranslate.setOnClickListener(this);
+
+        fillingArrayList();
+        initSpinners(spinnerCurrencyFirst, spinnerAdapterFirst);
+        initSpinners(spinnerCurrencySecond, spinnerAdapterSecond);
     }
 
     private void getDataFromEditTextCurrency() {
@@ -115,7 +103,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private void initSpinners(Spinner spinner, ArrayAdapter<String> adapter) {
         // инициализация и заполнение обоих спиннеров
-        spinner.setOnItemSelectedListener(this);
         adapter = new ArrayAdapter<String>(this,
                 android.R.layout.simple_spinner_item, spinnerListCurrencySymbols);
 
@@ -123,22 +110,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         spinner.setAdapter(adapter);
     }
 
-    private void clickItemFromSpinner(int currentId) {
-        // оюработчик обоих spinner
-        switch (currentId) {
-            case R.id.spinnerCurrency:
-                break;
-
-            case R.id.spinnerCurrency1:
-                break;
-        }
-    }
 
     private void getDataFromCourseParse() {
         Intent currentIntent = getIntent();
 
+        fillingFields();
+
         String resultCurrency = currentIntent.getStringExtra("resultCurrency");
         if (resultCurrency == null) {
+            // если это первый запуск выходим из метода
             return;
         }
         String userTextFirst = currentIntent.getStringExtra("userTextFirst");
@@ -146,8 +126,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         String spinnerResultSecond = currentIntent.getStringExtra("spinnerResultSecond");
 
         fillingEditTextsCourseParse(resultCurrency, userTextFirst);
-        fillingSpinnersCourseParse(spinnerResultFirst, spinnerCurrencyFirst);
-        fillingSpinnersCourseParse(spinnerResultSecond, spinnerCurrencySecond);
+        fillingSpinnersCourseParse(spinnerResultFirst,spinnerCurrencyFirst);
+        fillingSpinnersCourseParse(spinnerResultSecond,spinnerCurrencySecond);
     }
 
     private void fillingEditTextsCourseParse(String resultCurrency, String userTextFirst) {
@@ -155,10 +135,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         editTextCurrencyFirst.setText(userTextFirst);
     }
 
-    private void fillingSpinnersCourseParse(String spinnerResultText, Spinner spinner) {
-        //  замена элементов в spinner
-        int positionTestSpinner = spinnerListCurrencySymbols.indexOf(spinnerResultText);
-        spinner.setSelection(positionTestSpinner);
-    }
+    private void fillingSpinnersCourseParse(String spinnerResultText , Spinner spinner){
+        int position = Arrays.asList(currencySymbols).indexOf(spinnerResultText);
 
+        spinner.setSelection(position);
+    }
 }
